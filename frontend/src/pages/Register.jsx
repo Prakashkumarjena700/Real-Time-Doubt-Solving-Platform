@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Register() {
-  const [role, setRole] = useState('')
+  const [role, setRole] = useState('student')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -15,6 +18,10 @@ export default function Register() {
   const subjectOptions = ["mathematics", "science", "english", "hindi", "geography", "history"];
   const tutoreStandardOptions = [6, 7, 8, 9, 10, 12];
   const languageOptions=["english","hindi","odia"]
+
+  const url="http://localhost:4500/users/register";
+  const navigate = useNavigate();
+
 
   const ChooseSubjects = (label) => {
     if (subjects.includes(label)) {
@@ -40,38 +47,45 @@ export default function Register() {
     }
   }
 
-  const Register = () => {
-
-    const selectedSubjected = subjects.join(', ');
-    const selectedLanguage=language.join(', ');
-    let selectedStandard;
-
-    if(role==='student'){
-      selectedStandard=standard
-    }else{
-       selectedStandard = standard.join(', ');
-    }
-   
-
+  const Register = async() => {
     const registerData={
       role,
       name,
       email,
       password,
       phone,
-      subjects:selectedSubjected || [],
+      subjects,
       classgrad,
-      standard:selectedStandard,
+      standard,
       dob,
-      language:selectedLanguage
+      language
     };
 
     console.log(registerData)
 
+    try{
+      const response = await axios.post(url, registerData);
+
+      if(response.data.msg=="Already have an account please login"){
+        alert('Please Login')
+        navigate('/login');
+      }else if(response.data.success===true){
+        alert('Register successful please login')
+        navigate('/login');
+      }else{
+        alert('Something went wrong')
+      }
+      console.log(response.data);
+    }catch(err){
+      console.error('Error during registration:', err);
+      alert('Something went wrong')
+    }
+
+
   }
 
   return (
-    <div>
+    <div  className="reg-form-container" >
       <div>
         <div>
           <label>Name</label>
@@ -106,7 +120,8 @@ export default function Register() {
         </div>
 
         }
-        <div>
+        {
+          role=='student' && <div>
           <select onChange={(e) => setClassgrad(e.target.value)} >
             <option value="">Select Class grad</option>
             <option value="a+">A+</option>
@@ -120,13 +135,14 @@ export default function Register() {
             <option value="e">E</option>
           </select>
         </div>
+        }
 
         {
           role === 'student' ?
 
             <div>
               <label>Select Standard</label>
-              <select onChange={(e)=>setStandard(e.target.value)} >
+              <select onChange={(e)=>setStandard([...standard,e.target.value])} >
                 <option value="">Select Standard</option>
                 <option value="6">6</option>
                 <option value="7">7</option>
@@ -182,7 +198,7 @@ export default function Register() {
 
 
 
-      <div>
+      <div className="button-container" >
         <button onClick={() => setRole('student')} >Register as Student</button>
         <button onClick={() => setRole('tutore')} >Register as Tutor</button>
       </div>

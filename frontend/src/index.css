@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.onLineUsersList{
+  border: 1px solid blue; 
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+}
+.onLineUsersList>div{
+  border: 2px solid green;
+}

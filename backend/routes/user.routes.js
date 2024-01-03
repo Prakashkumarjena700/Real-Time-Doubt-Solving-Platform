@@ -6,7 +6,7 @@ const { userModel } = require('../model/user.model');
 const userRoute = express.Router();
 
 userRoute.post('/register',async(req,res)=>{
-    const {role,name, email,password, phone,subjects, classgrad, dob,  language}=req.body;
+    const {role,name, email,password, phone,subjects, classgrad, dob,language, standard}=req.body;
     try {
         const user = await userModel.find({ email })
         if (user.length > 0) {
@@ -17,7 +17,7 @@ userRoute.post('/register',async(req,res)=>{
                 if (err) {
                     res.send("Something went wrong")
                 } else {
-                    const user = new userModel({ role,name, email,password:hash, phone,subjects, classgrad, dob,  language })
+                    const user = new userModel({ role,name, email,password:hash, phone,subjects, classgrad, dob,  language,standard })
                     await user.save()
                     res.send({ "msg": "new user has been register", "success": true })
                 }
@@ -38,7 +38,7 @@ userRoute.post("/login", async (req, res) => {
             bcrypt.compare(password, user[0].password, (err, result) => {
                 if (result) {
                     const token = jwt.sign({ userID: user[0]._id }, "doubtsolving")
-                    res.send({ "msg": "Login sucessful", "sucess": true, token, user })
+                    res.send({ "msg": "Login sucessful", "success": true, token, user })
                 } else {
                     res.send({ "msg": "Wrong crediential", "sucess": false })
                 }

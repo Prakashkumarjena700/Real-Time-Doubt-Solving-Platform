@@ -15,13 +15,15 @@ const server = http.createServer(app)
 
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:3000',
+        origin: 'http://localhost:3000/dashboard',
         methods: ["GET", "POST"]
     }
 })
 
 io.on("connection", (socket) => {
     socket.on('userConnected', (userDetails) => {
+        console.log(socket.id);
+
         onlineUsers[socket.id] = userDetails;
         io.emit('updateOnlineUsers', Object.values(onlineUsers));
     });
@@ -32,13 +34,14 @@ io.on("connection", (socket) => {
         io.emit('updateOnlineUsers', Object.values(onlineUsers));
     });
 
-    socket.on("send_message", (data) => {
-        socket.to(data.room).emit("receive_message", data)
-    });
-
     socket.on("join_room", (data) => {
         socket.join(data);
     })
+
+    socket.on("send_message", (data) => {
+        console.log('Received message:', data);
+        io.emit("receive_alert", data);
+    });
 
 })
 

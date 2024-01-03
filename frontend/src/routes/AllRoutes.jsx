@@ -3,9 +3,8 @@ import {Routes, Route} from 'react-router-dom';
 import Home from '../pages/Home';
 import Register from '../pages/Register';
 import Login from '../pages/Login';
-import StudentDashboard from '../pages/StudentDashboard';
-import TutoreDashboard from '../pages/TutoreDashboard';
 import Chat from '../pages/Chat';
+import Dashboard from '../pages/Dashboard';
 
 export default function AllRoutes() {
   return (
@@ -13,10 +12,8 @@ export default function AllRoutes() {
         <Route path='/' element={<Home/>} ></Route>
         <Route path='/register' element={<Register/>} ></Route>
         <Route path='/login' element={<Login/>} ></Route>
-        <Route path='/studentDashboard' element={<StudentDashboard/>} ></Route>
-        <Route path='/tutoreDashboard' element={<TutoreDashboard/>} ></Route>
         <Route path='/chat' element={<Chat/>} ></Route>
-        
+        <Route path='/dashboard' element={<Dashboard/>} ></Route>
     </Routes>
   )
 }

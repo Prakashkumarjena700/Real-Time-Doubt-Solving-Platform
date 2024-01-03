@@ -47,7 +47,7 @@ export default function Chat() {
   <h2>Online Users</h2>
   <ul>
     {onlineUsers.map((user) => (
-      <p key={user.username}>{user.username}</p>
+      <p key={user._id}>{user.username}</p>
     ))}
   </ul>
 </div></div>
